@@ -13,37 +13,54 @@ import { Button } from "@/components/ui/button";
 import { updateIssueStatus } from "@/lib/actions/issueActions";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useUser } from "@clerk/nextjs";
 
 interface StatusFormProps {
   issueId: number;
   currentStatus: "OPEN" | "IN_PROGRESS" | "CLOSED";
+  assigneeEmail?: string | null;
 }
 
 export default function StatusForm({
-    issueId,
-    currentStatus,
+  issueId,
+  currentStatus,
+  assigneeEmail,
 }: StatusFormProps) {
-    const router = useRouter()
+  const router = useRouter();
+  const { user } = useUser(); // 👈 Clerk logged-in user
   const [status, setStatus] = useState(currentStatus);
 
-  async function handleSubmit(formData: FormData) {
+  const isAssignee = user?.primaryEmailAddress?.emailAddress === assigneeEmail;
 
-    
+  async function handleSubmit(formData: FormData) {
     const newStatus = formData.get("status") as
       | "OPEN"
       | "IN_PROGRESS"
       | "CLOSED";
-    const res = await updateIssueStatus(issueId, newStatus);
-    if (res) {
-        router.push("/issues")
-        toast(`Issue status updated to ${newStatus}`)
+
+    try {
+      const res = await updateIssueStatus(issueId, newStatus);
+      if (res) {
+        router.push("/issues");
+        toast.success(`Issue status updated to ${newStatus}`);
+      }
+      setStatus(newStatus);
+    } catch (err) {
+      toast.error("You are not allowed to update this issue status.");
+      console.error(err);
     }
-    setStatus(newStatus);
+  }
+
+  if (!isAssignee) {
+    return (
+      <div className="text-sm text-gray-400">
+        Only the assignee can update status.
+      </div>
+    );
   }
 
   return (
     <form action={handleSubmit} className="flex items-center gap-3">
-      
       <input type="hidden" name="status" value={status} readOnly />
 
       <Select
@@ -70,7 +87,12 @@ export default function StatusForm({
 function SubmitButton() {
   const { pending } = useFormStatus();
   return (
-    <Button type="submit" className="cursor-pointer" size="sm" disabled={pending}>
+    <Button
+      type="submit"
+      className="cursor-pointer"
+      size="sm"
+      disabled={pending}
+    >
       {pending ? "Updating..." : "Update"}
     </Button>
   );

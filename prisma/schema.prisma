@@ -11,13 +11,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  id      Int     @id @default(autoincrement())
+  clerkId String  @unique // Clerk user ID
+  email   String  @unique
+  name    String?
+
+  // Relations
+  issuesCreated  Issue[] @relation("CreatedIssues")
+  issuesAssigned Issue[] @relation("AssignedIssues")
+}
+
 model Issue {
-  id Int @id @default(autoincrement())
-  title String
+  id          Int      @id @default(autoincrement())
+  title       String
   description String
-  status Status @default(OPEN)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  status      Status   @default(OPEN)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  creatorId Int
+  creator   User @relation("CreatedIssues", fields: [creatorId], references: [id])
+
+  assigneeId Int?
+  assignee   User? @relation("AssignedIssues", fields: [assigneeId], references: [id])
 }
 
 enum Status {

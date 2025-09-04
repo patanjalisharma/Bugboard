@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge"
 import { getAllIssues } from "@/lib/actions/issueActions";
 
 const IssuePage = async () => {
+  
 
   const issues = await getAllIssues()
   return (

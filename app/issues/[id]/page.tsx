@@ -1,4 +1,4 @@
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import {
   Card,
   CardHeader,
@@ -6,8 +6,10 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
-import { getIssueById } from "@/lib/actions/issueActions";
+import { getIssueById, getOrCreateUser } from "@/lib/actions/issueActions";
 import StatusForm from "@/components/StatusForm";
+import IssueCard from "@/components/EditDelete";
+import { auth } from "@clerk/nextjs/server";
 
 
 interface IssuePageProps {
@@ -15,9 +17,18 @@ interface IssuePageProps {
 }
 
 export default async function IssuePage({ params }: IssuePageProps) {
+
+  const { userId } = await auth()
+
+  if (!userId) {
+    redirect('/sign-in')
+  }
  const { id } = await params; // 👈 await params
   const issueId = Number(id);
   const issue = await getIssueById(issueId);
+
+  const user = await getOrCreateUser()
+  const currentUserId = user.id
 
   if (!issue) return notFound();
 
@@ -29,14 +40,16 @@ export default async function IssuePage({ params }: IssuePageProps) {
         </CardHeader>
 
         <CardContent>
-          <p className="text-zinc-300">{issue.description}</p>
+          <p className="text-zinc-300 line-clamp-2">{issue.description}</p>
         </CardContent>
 
         <CardFooter className="flex items-center justify-between">
           
-          <StatusForm issueId={issueId} currentStatus={issue.status} />
+          <StatusForm issueId={issueId} currentStatus={issue.status} assigneeEmail={issue.assignee?.email} />
+
         </CardFooter>
       </Card>
+      <IssueCard  id={issue.id} title={issue.title} description={issue.description} status={issue.status} creatorId={issue.creatorId} currentUserId={currentUserId} />
     </div>
   );
 }

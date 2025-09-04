@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import NavItems from "./NavItems";
-import {  Bug, Menu, X } from "lucide-react";
+import {  Bug, Menu, PlusIcon, X } from "lucide-react";
 import { useState } from "react";
 import {
   SignInButton,
@@ -10,6 +10,7 @@ import {
   SignedOut,
   UserButton,
 } from '@clerk/nextjs'
+import { Button } from "./ui/button";
 
 
 const Navbar = () => {
@@ -37,6 +38,12 @@ const Navbar = () => {
           <SignedIn>
             <UserButton />
           </SignedIn>
+          <Link href="/issues/new">
+          <Button variant={"outline"} className=" cursor-pointer rounded-3xl py-2 hover:bg-gray-300">
+            <PlusIcon/>
+            New
+          </Button>
+        </Link>
           
         </div>
 
@@ -52,6 +59,12 @@ const Navbar = () => {
       {isOpen && (
         <div className="sm:hidden mt-4 flex flex-col gap-4">
           <NavItems />
+          <Link href="/issues/new">
+          <Button variant={"outline"} className=" cursor-pointer rounded-3xl py-2 hover:bg-gray-300">
+            <PlusIcon/>
+            New
+          </Button>
+        </Link>
            <SignedOut>
             <SignInButton mode="modal">
               <button className="bg-[#6c47ff] text-white rounded-full font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer">
@@ -60,6 +73,7 @@ const Navbar = () => {
             </SignInButton>
             
           </SignedOut>
+
           <SignedIn>
             <UserButton />
           </SignedIn>
