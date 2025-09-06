@@ -19,7 +19,7 @@ export default function WeeklyIssuesChart({ data }: WeeklyIssuesChartProps) {
           <Tooltip/>
           <Legend />
           <Bar dataKey="OPEN" fill="#22c55e" />
-          <Bar dataKey="IN_PROGRESS" fill="#eab308" />
+          <Bar dataKey="IN_PROGRESS" fill="#3b82f6" />
           <Bar dataKey="CLOSED" fill="#ef4444" />
         </BarChart>
       </ResponsiveContainer>

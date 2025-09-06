@@ -80,7 +80,7 @@ export default function IssueCard({
     status === "OPEN"
       ? "bg-green-500/20 text-green-400"
       : status === "IN_PROGRESS"
-      ? "bg-yellow-500/20 text-yellow-400"
+      ? "bg-blue-500/20 text-blue-400"
       : "bg-red-500/20 text-red-400";
 
   return (
