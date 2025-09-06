@@ -62,11 +62,12 @@ export async function getWeeklyIssueStats() {
   const results = await prisma.issue.groupBy({
     by: ["status"],
     _count: { status: true },
-    where: {
-  updatedAt: {
+   where: {
+  createdAt: {
     gte: new Date(new Date().setDate(new Date().getDate() - 28)),
   },
 },
+
 
   });
 
