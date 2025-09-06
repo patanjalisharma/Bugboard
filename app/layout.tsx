@@ -6,6 +6,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Poppins } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { SyncUserAfterLogin } from "@/components/SyncUser";
+import { SpeedInsights } from "@vercel/speed-insights/next"
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -42,6 +43,7 @@ export default function RootLayout({
             <SyncUserAfterLogin />
             <Navbar />
             {children}
+            <SpeedInsights />
             <Toaster />
           </ThemeProvider>
         </body>
