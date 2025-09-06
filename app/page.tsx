@@ -3,6 +3,9 @@ import { Button } from "@/components/ui/button";
 import { getWeeklyIssueStats } from "@/lib/actions/issueActions";
 import Link from "next/link";
 
+
+export const revalidate = 0; 
+
 export default async function DashboardPage() {
   const weeklyData = await getWeeklyIssueStats();
 
