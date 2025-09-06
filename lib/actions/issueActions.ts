@@ -59,16 +59,16 @@ export async function updateIssueStatus(
   return updated;
 }
 export async function getWeeklyIssueStats() {
+  const now = new Date();
+  const last28Days = new Date();
+  last28Days.setUTCDate(now.getUTCDate() - 28);
+
   const results = await prisma.issue.groupBy({
     by: ["status"],
     _count: { status: true },
-   where: {
-  createdAt: {
-    gte: new Date(new Date().setDate(new Date().getDate() - 28)),
-  },
-},
-
-
+    where: {
+      createdAt: { gte: last28Days },
+    },
   });
 
   const summary = { OPEN: 0, IN_PROGRESS: 0, CLOSED: 0 };
@@ -77,13 +77,9 @@ export async function getWeeklyIssueStats() {
     summary[r.status as "OPEN" | "IN_PROGRESS" | "CLOSED"] = r._count.status;
   });
 
-  return [
-    {
-      week: "Last 4 Weeks",
-      ...summary,
-    },
-  ];
+  return [{ week: "Last 4 Weeks", ...summary }];
 }
+
 
 export async function getOrCreateUser() {
   const clerkUser = await currentUser();
