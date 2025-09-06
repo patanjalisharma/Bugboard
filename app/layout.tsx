@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Poppins } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import { SyncUserAfterLogin } from "@/components/SyncUser";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -22,6 +23,8 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  
   return (
     <ClerkProvider>
       <html
@@ -36,6 +39,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
+            <SyncUserAfterLogin />
             <Navbar />
             {children}
             <Toaster />

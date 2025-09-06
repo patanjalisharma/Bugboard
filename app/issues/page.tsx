@@ -42,7 +42,7 @@ const IssuePage = async () => {
                   ? "bg-yellow-500/20 text-yellow-400"
                   : issue.status === "IN_PROGRESS"
                   ? "bg-blue-500/20 text-blue-400"
-                  : "bg-green-500/20 text-green-400"
+                  : "bg-red-500/20 text-red-400"
               }
             >
               {issue.status.replace("_", " ")}

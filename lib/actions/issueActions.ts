@@ -63,10 +63,11 @@ export async function getWeeklyIssueStats() {
     by: ["status"],
     _count: { status: true },
     where: {
-      createdAt: {
-        gte: new Date(new Date().setDate(new Date().getDate() - 28)), // last 4 weeks
-      },
-    },
+  updatedAt: {
+    gte: new Date(new Date().setDate(new Date().getDate() - 28)),
+  },
+},
+
   });
 
   const summary = { OPEN: 0, IN_PROGRESS: 0, CLOSED: 0 };
@@ -85,22 +86,34 @@ export async function getWeeklyIssueStats() {
 
 export async function getOrCreateUser() {
   const clerkUser = await currentUser();
-  if (!clerkUser) {
-    
-    throw new Error("You must be logged in to perform this action.");
-  }
+  if (!clerkUser) throw new Error("You must be logged in.");
 
+  
   let user = await prisma.user.findUnique({
     where: { clerkId: clerkUser.id },
   });
 
+  
+  if (!user) {
+    user = await prisma.user.findUnique({
+      where: { email: clerkUser.emailAddresses[0].emailAddress.toLowerCase() },
+    });
+  }
+
+  // If still not found, create a new user
   if (!user) {
     user = await prisma.user.create({
       data: {
         clerkId: clerkUser.id,
-        email: clerkUser.emailAddresses[0].emailAddress,
+        email: clerkUser.emailAddresses[0].emailAddress.toLowerCase(),
         name: clerkUser.firstName || "",
       },
+    });
+  } else if (!user.clerkId) {
+    // If email existed but clerkId was empty, update it
+    user = await prisma.user.update({
+      where: { email: user.email },
+      data: { clerkId: clerkUser.id },
     });
   }
 

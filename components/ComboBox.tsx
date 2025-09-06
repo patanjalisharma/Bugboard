@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,11 +12,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 interface ComboboxProps {
   value?: string;
@@ -26,24 +21,8 @@ interface ComboboxProps {
   placeholder?: string;
 }
 
-interface User {
-  id: number;
-  email: string;
-}
-
-export function Combobox({
-  value,
-  onChange,
-  options,
-  placeholder,
-}: ComboboxProps) {
-  const [users, setUsers] = React.useState<User[]>([]);
+export function Combobox({ value, onChange, options, placeholder }: ComboboxProps) {
   const [open, setOpen] = React.useState(false);
-  React.useEffect(() => {
-    fetch("/api/users")
-      .then((res) => res.json())
-      .then((data) => setUsers(data));
-  }, []);
 
   return (
     <Popover open={open} onOpenChange={setOpen}>

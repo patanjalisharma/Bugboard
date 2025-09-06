@@ -12,7 +12,7 @@ export async function POST(req: Request) {
     let assignee = null;
     if (assigneeEmail) {
       assignee = await prisma.user.findUnique({
-        where: { email: assigneeEmail.toLowerCase() }, // ✅ normalize
+        where: { email: assigneeEmail.toLowerCase() }, 
       });
 
       if (!assignee) {
