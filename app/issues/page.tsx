@@ -11,6 +11,9 @@ import {
 import { Badge } from "@/components/ui/badge"
 import { getAllIssues } from "@/lib/actions/issueActions";
 
+
+export const revalidate = 0; 
+
 const IssuePage = async () => {
   
 
