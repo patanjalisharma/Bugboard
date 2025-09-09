@@ -8,6 +8,22 @@ import { currentUser } from "@clerk/nextjs/server";
 
 export async function getAllIssues() {
   return await prisma.issue.findMany({
+    include: {
+      creator: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+      assignee: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
     orderBy: { createdAt: "desc" },
   });
 }

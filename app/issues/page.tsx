@@ -8,58 +8,67 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge"
+import { Badge } from "@/components/ui/badge";
 import { getAllIssues } from "@/lib/actions/issueActions";
 
-
-export const revalidate = 0; 
+export const revalidate = 0;
 
 const IssuePage = async () => {
-  
-
-  const issues = await getAllIssues()
+  const issues = await getAllIssues();
   return (
     <main className="max-w-7xl mx-auto p-10">
-     
-
       <div className="max-w-7xl mx-auto grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
-    {issues.map((issue) => (
+        {issues.map((issue) => (
+          <Card
+            key={issue.id}
+            className="shadow-md rounded-2xl border border-zinc-800 bg-zinc-900 text-white mt-8"
+          >
+            <CardHeader>
+              <CardTitle className="text-lg font-semibold">
+                {issue.title}
+              </CardTitle>
+              <div className="space-y-1">
+                <CardDescription className="text-zinc-400">
+                  Created on: {new Date(issue.createdAt).toDateString()}
+                </CardDescription>
 
-     <Card key={issue.id} className="shadow-md rounded-2xl border border-zinc-800 bg-zinc-900 text-white mt-8">
-      <CardHeader>
-        <CardTitle className="text-lg font-semibold">{issue.title}</CardTitle>
-        <CardDescription className="text-zinc-400">Created on: {issue.createdAt.toDateString()}</CardDescription>
-      </CardHeader>
-      
-      <CardContent>
-        <p className="line-clamp-3">
-          {issue.description}
-        </p>
-      </CardContent>
-      
-      <CardFooter className="flex items-center justify-between">
-        <Badge
-              variant="outline"
-              className={
-                issue.status === "OPEN"
-                  ? "bg-green-500/20 text-green-400"
-                  : issue.status === "IN_PROGRESS"
-                  ? "bg-blue-500/20 text-blue-400"
-                  : "bg-red-500/20 text-red-400"
-              }
-            >
-              {issue.status.replace("_", " ")}
-            </Badge>
-            <Link href={`/issues/${issue.id}`}>
-        <Button size="sm" variant="secondary" className="cursor-pointer">
-          View Issue
-        </Button>
-        </Link>
-      </CardFooter>
-    </Card>
-    ))}
-    </div>
-      
+                <CardDescription className="text-zinc-400">
+                  Raised by:{" "}
+                  {issue.creator?.name || issue.creator?.email || "Unknown"}
+                </CardDescription>
+              </div>
+            </CardHeader>
+
+            <CardContent>
+              <p className="line-clamp-3">{issue.description}</p>
+            </CardContent>
+
+            <CardFooter className="flex items-center justify-between">
+              <Badge
+                variant="outline"
+                className={
+                  issue.status === "OPEN"
+                    ? "bg-green-500/20 text-green-400"
+                    : issue.status === "IN_PROGRESS"
+                    ? "bg-blue-500/20 text-blue-400"
+                    : "bg-red-500/20 text-red-400"
+                }
+              >
+                {issue.status.replace("_", " ")}
+              </Badge>
+              <Link href={`/issues/${issue.id}`}>
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="cursor-pointer"
+                >
+                  View Issue
+                </Button>
+              </Link>
+            </CardFooter>
+          </Card>
+        ))}
+      </div>
     </main>
   );
 };
