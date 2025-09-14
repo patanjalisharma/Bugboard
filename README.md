@@ -6,7 +6,9 @@
 
 - Assignee-based issues  
 - Restricted access: only authorized users can update issue status, edit, or delete issues  
-- Secure and user-friendly interface  
+- Secure and user-friendly interface
+- User profiles to view issues created by you or assigned to you
+- Dashboard visualization for tracking issue progress (Open / In Progress / Closed)
 
 ## Tech Stack
 
@@ -14,10 +16,24 @@
 - **Prisma** – database ORM  
 - **Shadcn/ui** – UI components  
 - **Clerk** – user authentication and management  
-- **PostgreSQL (Neon DB)** – database  
+- **PostgreSQL (Neon DB)** – database
+- **SQLite** – development database
 
-## Note
+## Setup
 
-- Copying or using this project without permission is not allowed  
+- Clone the repository
+  
+- Run
+  ```
+  npm install
+  ```
+- Setup .env file
+
+  
+```
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+DATABASE_URL=
+```
 
 Made with ❤️ by **Patanjali Sharma**
